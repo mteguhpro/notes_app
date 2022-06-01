@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\RestApi\CategoryController;
+use App\Http\Controllers\RestApi\LoginController;
+use App\Http\Controllers\RestApi\NoteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +19,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::post('/login', [LoginController::class, 'login']);
+
+Route::middleware([App\Http\Middleware\JwtAuthMiddleware::class])->group(function () {
+
+    Route::apiResource('notes', NoteController::class);
+    Route::apiResource('categories', CategoryController::class);
+    
 });
