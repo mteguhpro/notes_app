@@ -18,7 +18,7 @@ class NoteController extends Controller
      */
     public function index(Request $request)
     {
-        $note = Note::select('title', 'picture', 'body', 'category_id', 'user_id')
+        $note = Note::select('id', 'title', 'picture', 'body', 'category_id', 'user_id')
             ->with(['category:id,name,slug', 'user:id,name,username,email'])->paginate($request->get('perPage'));
 
         return NoteResource::collection($note->all())
@@ -62,7 +62,7 @@ class NoteController extends Controller
      */
     public function show($id)
     {
-        $note = Note::select('title', 'picture', 'body', 'category_id', 'user_id')
+        $note = Note::select('id', 'title', 'picture', 'body', 'category_id', 'user_id')
             ->where('id', $id)
             ->with(['category:id,name,slug', 'user:id,name,username,email'])->first();
 
@@ -86,6 +86,9 @@ class NoteController extends Controller
     {
         $note = Note::where('id', $id)->first();
         
+        if($note->user_id !== $request->get('jwt_data')['id_user']){
+            return response()->json(['message' => 'Tidak memiliki akses'], 400);
+        }
         $rules = [
             'title' => 'required',
             'body' => 'required',
@@ -105,11 +108,18 @@ class NoteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $note = Note::where('id', $id)->first();
+        
+        if($note->user_id !== $request->get('jwt_data')['id_user']){
+            return response()->json(['message' => 'Tidak memiliki akses'], 400);
+        }
+
         $hapus = Note::where('id', $id)->delete();
         return response()->json([
             'message' => $hapus ? 'Berhasil Hapus' : 'Gagal Hapus'
