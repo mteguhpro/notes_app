@@ -34,25 +34,25 @@ function Login() {
     }
     return (
         <>
-            <h1>Login</h1>
+            <h1 className='text-4xl font-bold'>Login</h1>
             <form className='mt-4' onSubmit={handleSubmit}>
                 {
                     error && <ErrorFetch message={error?.data?.message} />
                 }
-                <div className="form-control w-full max-w-xl">
+                <div className="form-control w-full">
                     <label className="label">
                         <span className="label-text">Email:</span>
                     </label>
-                    <input required type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder="Email" className="input input-bordered w-full max-w-xl" />
+                    <input required type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder="Email" className="input input-bordered w-full" />
                 </div>
-                <div className="form-control w-full max-w-xl">
+                <div className="form-control w-full">
                     <label className="label">
                         <span className="label-text">Password:</span>
                     </label>
-                    <input required type="password" value={password} onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" className="input input-bordered w-full max-w-xl" />
+                    <input required type="password" value={password} onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" className="input input-bordered w-full" />
                 </div>
 
-                <div className="form-control w-full max-w-xl">
+                <div className="form-control w-full">
                     {
                         isLoading ? 'Loading..' : <button className="btn btn-sm my-3">Login</button>
                     }

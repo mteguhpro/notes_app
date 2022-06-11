@@ -14,7 +14,7 @@ const EditNote = React.lazy( () => import('../page/EditNote/EditNote'))
 
 function ContentRoute() {
     return (
-            <div className="px-6">
+            <div className="px-4 max-w-2xl mx-auto">
                 <Suspense fallback={<LoadingFetch/>} >
                     <Routes>
                         <Route path="/" element={<ListNote/>} />

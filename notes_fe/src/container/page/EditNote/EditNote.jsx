@@ -64,31 +64,31 @@ function EditNote() {
             {
               errorPut && <ErrorFetch message={errorPut?.data?.message}/>
             }
-            <div className="form-control w-full max-w-xl">
+            <div className="form-control w-full">
               <label className="label">
                 <span className="label-text">Title:</span>
               </label>
-              <input required type="text" value={title || ''} onChange={(e) => { setTitle(e.target.value) }} placeholder="Title here" className="input input-bordered w-full max-w-xl" />
+              <input required type="text" value={title || ''} onChange={(e) => { setTitle(e.target.value) }} placeholder="Title here" className="input input-bordered w-full" />
             </div>
-            <div className="form-control w-full max-w-xl">
+            <div className="form-control w-full">
               <label className="label">
                   <span className="label-text">Category:</span>
               </label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)} className="select select-bordered w-full max-w-xl">
+              <select value={category} onChange={(e) => setCategory(e.target.value)} className="select select-bordered w-full">
                   <option value="">{isLoadingCategory ? 'Loading..' : 'Pilih..'}</option>
                   {dataCategory ? dataCategory.data.map((d) =>{
                       return (<option key={d.id} value={d.id}>{d.name}</option>)
                   }) : ''}
               </select>
             </div>
-            <div className="form-control w-full max-w-xl">
+            <div className="form-control w-full">
               <label className="label">
                 <span className="label-text">Body:</span>
               </label>
               <textarea required onChange={e => setBody(e.target.value)} value={body || ''} className="textarea textarea-bordered h-24" placeholder="Body"></textarea>
             </div>
 
-            <div className="form-control w-full max-w-xl">
+            <div className="form-control w-full">
               {
                 isLoadingPut ? <LoadingFetch/> : <button className="btn btn-sm my-3">Update</button>
               }
