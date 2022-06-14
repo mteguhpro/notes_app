@@ -45,10 +45,15 @@ class NoteController extends Controller
         if($validator->fails()){
             return response()->json(['message' => $validator->errors()->first()], 400);
         }
+        if($request->hasFile('picture')){
+            $path = $request->file('picture')->store('pictures');
+        }
+
         $note = Note::create([
             'title' => $request->input('title'),
             'category_id' => $request->input('category_id'),
             'body' => $request->input('body'),
+            'picture' => $path ?? null,
             'user_id' => $request->get('jwt_data')['id_user'],
         ]);
         return new NoteResource($note);
