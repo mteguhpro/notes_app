@@ -37,9 +37,9 @@ instanceAxios.interceptors.response.use(function (response) {
  */
 const axiosWithAuthBaseQuery =
   ({ baseUrl } = { baseUrl: '' }) =>
-    async ({ url, method, data, params }) => {
+    async ({ url, method, data, params, headers }) => {
       try {
-        const result = await instanceAxios({ url: baseUrl + url, method, data, params })
+        const result = await instanceAxios({ url: baseUrl + url, method, data, params, headers })
         return { data: result.data }
       } catch (axiosError) {
         let err = axiosError

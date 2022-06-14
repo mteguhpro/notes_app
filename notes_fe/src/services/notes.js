@@ -17,7 +17,12 @@ export const notesApi = createApi({
       query: (id) => ({ url: 'notes/' + id, method: 'get' }),
     }),
     createNotes: builder.mutation({
-      query: (data) => ({ url: 'notes', method: 'post', data:data }),
+      query: (data) => {
+        const headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+        return { url: 'notes', method: 'post', data:data, headers }
+      },
     }),
     putNotes: builder.mutation({
       query: ({id, data}) => ({ url: 'notes/' + id, method: 'post', data:data }),

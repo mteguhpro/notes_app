@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import BackButton from '../../../component/BackButton'
 import { useCreateNotesMutation, useAllCategoriesQuery } from '../../../services/notes';
 import { useNavigate } from "react-router-dom"
@@ -11,6 +11,7 @@ function NewNote() {
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [body, setBody] = useState("");
+    const picture = useRef();
     
     const [postNote, { isLoading, error }] = useCreateNotesMutation()
     const { data:dataCategory, error:errorCategory, isLoading:isLoadingCategory } = useAllCategoriesQuery()
@@ -22,6 +23,7 @@ function NewNote() {
         e.preventDefault();
         const post = await postNote({ 
             title, 
+            picture : picture.current?.files[0],
             body,
             category_id : category,
         })
@@ -29,7 +31,7 @@ function NewNote() {
             dispatch(addSuccess('Berhasil Membuat Catatan Baru'))
             navigate('/')
         }
-        console.log(post)
+        // console.log(post)
     }
 
     return (
@@ -49,6 +51,12 @@ function NewNote() {
                         <span className="label-text">Title:</span>
                     </label>
                     <input required type="text" value={title} onChange={(e)=>{setTitle(e.target.value)}} placeholder="Title here" className="input input-bordered w-full" />
+                </div>
+                <div className="form-control w-full">
+                    <label className="label">
+                        <span className="label-text">Picture:</span>
+                    </label>
+                    <input type="file" ref={picture} placeholder="Picture here" className="input input-bordered w-full" />
                 </div>
                 <div className="form-control w-full">
                     <label className="label">
