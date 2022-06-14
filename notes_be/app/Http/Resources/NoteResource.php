@@ -21,7 +21,7 @@ class NoteResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
-            'picture' => $this->picture,
+            'picture' => $this->picture ? url('upload/'.$this->picture) : null,
             'category' => new CategoryResource($this->category),
             'user' => new UserResource($this->user),
         ];

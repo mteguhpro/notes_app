@@ -65,6 +65,9 @@ function DetailNote(){
                   </div>
                   <h1 className="font-medium leading-tight text-5xl mt-0 mb-2">{data?.data?.title}</h1>
                   <b>{data?.data?.user?.name}</b> {' - '} {data?.data?.category?.name}
+                  <div>
+                    {data?.data?.picture && <img className="w-4/5 mx-auto" alt='picture' src={data?.data?.picture}/>}
+                  </div>
                   <p>{data?.data?.body}</p>
                 </>
           ) : null}
