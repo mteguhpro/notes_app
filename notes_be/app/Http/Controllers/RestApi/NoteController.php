@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\NoteResource;
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class NoteController extends Controller
@@ -90,21 +91,40 @@ class NoteController extends Controller
     public function update(Request $request, $id)
     {
         $note = Note::where('id', $id)->first();
+        if(!$note){
+            return response()->json(['message' => 'Data Tidak Ditemukan'], 404);
+        }
         
         if($note->user_id !== $request->get('jwt_data')['id_user']){
             return response()->json(['message' => 'Tidak memiliki akses'], 400);
         }
+        if($request->hasFile('picture')){
+            $path = $request->file('picture')->store('pictures');
+        }
+        if(!empty($path) && !empty($note->picture)){
+            //hapus gambar karena akan ditimpa gambar baru
+            Storage::delete($note->picture);
+        }
+        
         $rules = [
             'title' => 'required',
             'body' => 'required',
             'category_id' => 'required',
         ];
 
+        if(!empty($path)){
+            $rules['picture'] = 'file';
+        }
+
         $validator = Validator::make($request->all(), $rules);
         if($validator->fails()){
             return response()->json(['message' => $validator->errors()->first()], 400);
         }
-        $edit = Note::where('id', $id)->update($validator->validated());
+        $dataUpdate = $validator->validated();
+        if(!empty($path)){
+            $dataUpdate['picture'] = $path;
+        }
+        $edit = Note::where('id', $id)->update($dataUpdate);
         return response()->json([
             'message' => $edit ? 'Berhasil Edit' : 'Gagal Edit'
         ]);
@@ -120,9 +140,16 @@ class NoteController extends Controller
     public function destroy(Request $request, $id)
     {
         $note = Note::where('id', $id)->first();
+        if(!$note){
+            return response()->json(['message' => 'Data Tidak Ditemukan'], 404);
+        }
         
         if($note->user_id !== $request->get('jwt_data')['id_user']){
             return response()->json(['message' => 'Tidak memiliki akses'], 400);
+        }
+        if($note->picture){
+            //hapus gambar
+            Storage::delete($note->picture);
         }
 
         $hapus = Note::where('id', $id)->delete();
