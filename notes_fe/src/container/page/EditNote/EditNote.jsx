@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ function EditNote() {
   const [title, setTitle] = useState();
   const [category, setCategory] = useState("");
   const [body, setBody] = useState();
+  const picture = useRef();
   
   const { data, error, isLoading } = useDetailNotesQuery(id)
   const [putNote, { isLoading:isLoadingPut, error:errorPut }] = usePutNotesMutation()
@@ -39,6 +40,7 @@ function EditNote() {
           _method: 'PUT',
           title, 
           body,
+          picture : picture.current?.files[0],
           category_id : category,
         }
     })
@@ -69,6 +71,15 @@ function EditNote() {
                 <span className="label-text">Title:</span>
               </label>
               <input required type="text" value={title || ''} onChange={(e) => { setTitle(e.target.value) }} placeholder="Title here" className="input input-bordered w-full" />
+            </div>
+            <div>
+              {data?.data?.picture && <img className="w-4/5 mx-auto" alt='picture' src={data?.data?.picture}/>}
+            </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">{data?.data?.picture && 'Ubah '}Picture:</span>
+                </label>
+                <input type="file" ref={picture} placeholder="Picture here" className="input input-bordered w-full" />
             </div>
             <div className="form-control w-full">
               <label className="label">

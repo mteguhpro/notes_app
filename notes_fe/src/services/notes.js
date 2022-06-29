@@ -25,7 +25,12 @@ export const notesApi = createApi({
       },
     }),
     putNotes: builder.mutation({
-      query: ({id, data}) => ({ url: 'notes/' + id, method: 'post', data:data }),
+      query: ({id, data}) => {
+        const headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+        return { url: 'notes/' + id, method: 'post', data:data, headers }
+      },
     }),
     deleteNotes: builder.mutation({
       query: (id) => ({ url: 'notes/' + id, method: 'delete'}),
